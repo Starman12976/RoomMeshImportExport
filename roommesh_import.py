@@ -405,8 +405,11 @@ def build_mesh(vertex_positions: list[tuple[float, float, float]],
     # Create new mesh
     mesh: bpy.types.Mesh = bpy.data.meshes.new(name)
 
+    # Reverse triangle order to fix inverted face normals
+    reversed_indices = [(tri[2], tri[1], tri[0]) for tri in triangle_indices]
+
     # Build mesh from data
-    mesh.from_pydata(vertex_positions, [], triangle_indices)
+    mesh.from_pydata(vertex_positions, [], reversed_indices)
 
     # Ensure mesh data is valid
     mesh.validate(clean_customdata=False)
